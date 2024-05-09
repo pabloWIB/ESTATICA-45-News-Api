@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sube tu archivo CSV</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      color: #212529;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    body{
+      height: 100vh;
+      width: 100%;
+      background: #212529;
+      overflow: hidden;
+      display: flex;
+      flex-flow: column wrap;
+      place-content: center;
+      align-items: center;
+      color: white;
+    }
+    main{
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div>
+      <input type="file" id="fileInput" accept=".csv">
+    </div>
+    <div>
+      <button onclick="leerCSV()">Mostrar CSV</button>
+    </div>
+  </main>
+  <div>
+    <div id="csvData"></div>
+  </div>
+  <a href="index.html">VOLVER</a>
+ 
+  <script>
+    function leerCSV() {
+      const fileInput = document.getElementById('fileInput');
+      const csvData = document.getElementById('csvData');
+
+      if (fileInput.files.length === 0) {
+        alert('Por favor, seleccione un archivo CSV.');
+        return;
+      }
+
+      //  //
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const contents = e.target.result;
+        mostrarCSVData(contents);
+      };
+
+      reader.readAsText(file);
+    }
+
+    //  //
+
+    function mostrarCSVData(data) {
+      const csvData = document.getElementById('csvData');
+      const lines = data.split('\n');
+      let html = '<table>';
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line !== '') {
+          const values = line.split(',');
+          html += '<tr>';
+          for (let j = 0; j < values.length; j++) {
+            html += '<td>' + values[j] + '</td>';
+          }
+          html += '</tr>';
+        }
+      }
+
+      html += '</table>';
+      csvData.innerHTML = html;
+    }
+
+  </script>
+</body>
+</html>
